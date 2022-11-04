@@ -8,13 +8,13 @@ from matplotlib.ticker import MaxNLocator
 
 class Queue:
     def __init__(self, input_distribution_type, service_time_distribution_type, service_channels, buffer_size,
-                 arrival_rate, service_time, requests):
+                 arrival_rate, service_frequency, requests):
         self.input_distribution_type = input_distribution_type
         self.service_time_distribution_type = service_time_distribution_type
         self.service_channels = service_channels
         self.buffer_size = buffer_size
         self.arrival_rate = arrival_rate
-        self.service_time = service_time
+        self.service_frequency = service_frequency
         self.requests = requests
 
         self.requests_arrival_times = self.calculate_requests_arrival_times()
@@ -29,7 +29,7 @@ class Queue:
             raise ValueError("Input distribution type = {0} is not supported".format(self.input_distribution_type))
 
     def calculate_requests_service_time(self):
-        return (-np.log(np.random.rand(1, self.requests))/self.service_time)[0].tolist()
+        return (-np.log(np.random.rand(1, self.requests))/self.service_frequency)[0].tolist()
 
     def simulate_queue(self):
         if self.service_channels == 1:
@@ -58,6 +58,6 @@ class Queue:
         plt.show()
 
     def __repr__(self):
-        return f"Queue ---{self.input_distribution_type}/{self.service_time_distribution_type}/" \
+        return f"<Queue ---{self.input_distribution_type}/{self.service_time_distribution_type}/" \
                f"{self.service_channels}/FIFO/{self.buffer_size}--- " \
-               f"(lambda={self.arrival_rate}, mi={self.service_time}, N={self.requests})"
+               f"(lambda={self.arrival_rate}, mi={self.service_frequency}, N={self.requests})>"
