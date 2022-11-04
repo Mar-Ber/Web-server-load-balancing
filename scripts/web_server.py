@@ -1,9 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-class WebServer:
-    def __init__(self):
-        pass
+from queue import Queue
 
-    def foo(self):
-        print("Hello world!")
+
+class WebServer:
+    def __init__(self, input_distribution_type, service_time_distribution_type, service_channels, buffer_size,
+                 arrival_rate, service_time, requests):
+        self.queue = Queue(input_distribution_type, service_time_distribution_type, service_channels, buffer_size,
+                           arrival_rate, service_time, requests)
+
+    def show_queue(self):
+        self.queue.show_queue_size()
+        print(self.queue)
