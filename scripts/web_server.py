@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from queue import Queue
+from queue import Queue, QueueShortest
 
 
 class WebServer:
@@ -22,12 +22,29 @@ class WebServer:
         self.requests_service_times = self.calculate_requests_service_times()
 
         self.queues = []
+
+
         if self.policy_type == "random":
             for i in range(self.queues_number):
                 self.queues.append(Queue(self.input_distribution_type, self.service_time_distribution_type,
                                          self.requests_arrival_times[i], self.requests_service_times[i],
                                          service_channels, buffer_size, arrival_rate/2,
                                          service_frequency, int(requests/2)))
+        elif self.policy_type == "shortest":
+            self.shortest_queues = [QueueShortest(self.input_distribution_type, self.service_time_distribution_type,
+                                         self.requests_arrival_times[i], self.requests_service_times[i],
+                                         service_channels, buffer_size, arrival_rate/2,
+                                         service_frequency, requests),
+                                    QueueShortest(self.input_distribution_type, self.service_time_distribution_type,
+                                         self.requests_arrival_times[i], self.requests_service_times[i],
+                                         service_channels, buffer_size, arrival_rate/2,
+                                         service_frequency, requests)]
+
+            ########
+            
+            ########
+        else:
+            print("fajne te kolejki")
 
     def calculate_n_requests_probability(self, n):
         if self.policy_type == "random":

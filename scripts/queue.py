@@ -26,6 +26,7 @@ class Queue:
             service_start = self.requests_arrival_times[0]
             requests_exit_time = [service_start+self.requests_service_times[0]]
             self.queue_size = [0]*self.requests
+            print(self.requests)
             for i in range(1, self.requests):
                 service_start = max(requests_exit_time[i-1], self.requests_arrival_times[i])
                 if service_start > self.requests_arrival_times[i]:
@@ -52,3 +53,46 @@ class Queue:
         return f"<Queue ---{self.input_distribution_type}/{self.service_time_distribution_type}/" \
                f"{self.service_channels}/FIFO/{self.buffer_size}--- " \
                f"(lambda={self.arrival_rate}, mi={self.service_frequency}, N={self.requests})>"
+
+
+class QueueShortest:
+    def __init__(self, requests_arrival_times, requests_service_times, service_channels, requests):
+        self.service_channels = service_channels
+        
+        self.requests_arrival_times = requests_arrival_times
+        self.requests_service_times = requests_service_times
+        self.requests = requests
+        self.queue_size = None
+
+    def simulate_shortest_queue(self):
+        if self.service_channels == 1:
+            service_start = self.requests_arrival_time
+            requests_exit_time = [service_start+self.requests_service_time]
+            self.queue_size = [0]*self.requests
+            print(self.requests)
+            for i in range(1, self.requests):
+                service_start = max(requests_exit_time[i-1], self.requests_arrival_times[i])
+                if service_start > self.requests_arrival_times[i]:
+                    self.queue_size[i] = self.queue_size[i-1] + 1
+                elif self.queue_size[i-1] > 0:
+                    self.queue_size[i] = self.queue_size[i-1] - 1
+                requests_exit_time.append(service_start + self.requests_service_times[i])
+        else:
+            raise ValueError("Service channels = {0} is not supported".format(self.service_channels))
+
+    def plot_queue(self, should_show=True):
+        if self.queue_size is None:
+            self.simulate_shortest_queue()
+        plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
+        plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
+        plt.plot(range(1, self.requests+1), self.queue_size, marker="o")
+        plt.title("Queue size")
+        plt.xlabel("n")
+        plt.ylabel("value")
+        if should_show:
+            plt.show()
+
+    # def __repr__(self):
+    #     return f"<Queue ---{}/{self.service_time_distribution_type}/" \
+    #            f"{self.service_channels}/FIFO/{self.buffer_size}--- " \
+    #            f"(lambda={self.arrival_rate}, mi={self.service_frequency}, N={self.requests})>"
