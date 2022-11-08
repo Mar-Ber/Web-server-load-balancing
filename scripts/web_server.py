@@ -3,7 +3,8 @@
 
 import numpy as np
 from queue import Queue, QueueShortest
-
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 class WebServer:
     def __init__(self, input_distribution_type, service_time_distribution_type, service_channels, buffer_size,
@@ -20,6 +21,7 @@ class WebServer:
         self.service_time_distribution_type = service_time_distribution_type
         self.requests_arrival_times = self.calculate_requests_arrival_times()
         self.requests_service_times = self.calculate_requests_service_times()
+        self.requests_service_times[0] = [x+0.1 for x in self.requests_service_times[0]]
         self.queues = []
 
 
@@ -34,21 +36,30 @@ class WebServer:
                                     QueueShortest(service_channels, int(requests/2))]
 
             ########
-            print(self.requests_arrival_times)
-            print(self.requests_service_times)
+            print(self.requests_arrival_times[0])
+            print(self.requests_service_times[0])
+            self.queue_size = [0]*int(requests/2)
+            self.queue_size2 = [0]*int(requests/2)
 
             for i in range(1, int(requests/2)):
                 if i == 1:
                     print("hej", i)
                     self.shortest_queues[0].simulate_shortest_queue(self.requests_arrival_times[0][i], self.requests_service_times[0][i], i)
                 else:
-                    if self.shortest_queues[0].queue_size[i-1] <= self.shortest_queues[1].queue_size[i-1]:
+                    if self.shortest_queues[0].iterator <= self.shortest_queues[1].iterator:
                         self.shortest_queues[0].simulate_shortest_queue(self.requests_arrival_times[0][i], self.requests_service_times[0][i], i)
+                        self.queue_size[i]=self.shortest_queues[0].iterator
+                        self.queue_size2[i]=self.shortest_queues[1].iterator
+
                         print("Kolejka nr 1")
                     else:
                         self.shortest_queues[1].simulate_shortest_queue(self.requests_arrival_times[0][i], self.requests_service_times[0][i], i)
+                        self.queue_size2[i]=self.shortest_queues[1].iterator
+                        self.queue_size[i]=self.shortest_queues[0].iterator
+
                         print("Kolejka nr 2")
 
+            print(self.queue_size, self.queue_size2)
             # QueueShortest(request_arrival_time, request_service_time,
             #                              service_channels, request)]
             ########
@@ -145,7 +156,21 @@ class WebServer:
                 else:
                     queue.plot_queue(should_show=False)
                 print("Queue {0} -> {1}".format(i+1, queue))
+    
+    def plot_nasze(self):
+        plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
+        plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
+        plt.plot(range(1, int(self.requests/2)+1), self.queue_size, marker="o")
+        plt.plot(range(1, int(self.requests/2)+1), self.queue_size2, marker="*")
+        
+        plt.title("Queue size")
+        plt.xlabel("n")
+        plt.ylabel("value")
+        plt.show()
+
+    
 
     def show_queueing_model(self, n=5):
         # self.print_calculated_values(n)
-        self.plot_queues()
+        # self.plot_queues()
+        self.plot_nasze()

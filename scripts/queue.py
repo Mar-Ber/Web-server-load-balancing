@@ -60,26 +60,35 @@ class QueueShortest:
         self.service_channels = service_channels
         self.first_time = True
         self.service_start = None
-        self.queue_size = [0]*requests
+        # self.queue_size = [0]*requests
         self.requests = requests
         self.requests_exit_time = None
+        self.iterator = 0
     def simulate_shortest_queue(self, request_arrival_time, request_service_time, i):
         if self.service_channels == 1:
             if self.first_time is True:
                 self.service_start = request_arrival_time
                 self.requests_exit_time = [self.service_start+ request_service_time]
                 self.first_time = False
+                self.iterator+=1
 
                 print("hehe")
             else:
+                print("h: ", self.requests_exit_time)
+                print("a: ", request_arrival_time)
+                # print("q ", self.queue_size)
                 self.service_start = max(self.requests_exit_time[-1], request_arrival_time)
                 if self.service_start > request_arrival_time:
-                    self.queue_size[i] = self.queue_size[i-1] + 1
+                    # self.queue_size[i] = self.queue_size[i-1] + 1
+                    self.iterator+=1
+
                     print("hop")
-                elif self.queue_size[i-1] > 0:
-                    self.queue_size[i] = self.queue_size[i-1] - 1
-                    print("hop2")
+                elif self.iterator > 0:
+                    # self.queue_size[i] = self.queue_size[i-1] - 1
+                    self.iterator-=1
+                        
                 self.requests_exit_time.append(self.service_start + request_service_time)
+
         else:
             raise ValueError("Service channels = {0} is not supported".format(self.service_channels))
 

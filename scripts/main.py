@@ -4,9 +4,9 @@
 from web_server import WebServer
 
 buffer_size = 3         # param: K
-arrival_rate = 10040       # param: lambda
-service_frequency = 250  # param: mi
-requests = 70        # param: N
+arrival_rate = 5      # param: lambda
+service_frequency = 30 # param: mi
+requests = 50      # param: N
 n = 3
 
 try:
