@@ -23,6 +23,7 @@ class WebServer:
         self.requests_service_times = self.calculate_requests_service_times()
         self.requests_service_times[0] = [x+0.1 for x in self.requests_service_times[0]]
         self.queues = []
+        self.choice = []
 
 
         if self.policy_type == "random":
@@ -43,21 +44,27 @@ class WebServer:
 
             for i in range(1, int(requests/2)):
                 if i == 1:
-                    print("hej", i)
+                    print("Kolejka nr 1", i)
                     self.shortest_queues[0].simulate_shortest_queue(self.requests_arrival_times[0][i], self.requests_service_times[0][i], i)
+                    self.queue_size[i]=self.shortest_queues[0].iterator
+                    self.queue_size2[i]=self.shortest_queues[1].iterator
+                    self.choice.append("1")
                 else:
+
                     if self.shortest_queues[0].iterator <= self.shortest_queues[1].iterator:
+                        print("Kolejka nr 1")
+
                         self.shortest_queues[0].simulate_shortest_queue(self.requests_arrival_times[0][i], self.requests_service_times[0][i], i)
                         self.queue_size[i]=self.shortest_queues[0].iterator
                         self.queue_size2[i]=self.shortest_queues[1].iterator
-
-                        print("Kolejka nr 1")
+                        self.choice.append("1")
                     else:
+                        print("Kolejka nr 2")
+                        self.choice.append("2")
                         self.shortest_queues[1].simulate_shortest_queue(self.requests_arrival_times[0][i], self.requests_service_times[0][i], i)
                         self.queue_size2[i]=self.shortest_queues[1].iterator
                         self.queue_size[i]=self.shortest_queues[0].iterator
 
-                        print("Kolejka nr 2")
 
             print(self.queue_size, self.queue_size2)
             # QueueShortest(request_arrival_time, request_service_time,
@@ -160,9 +167,17 @@ class WebServer:
     def plot_nasze(self):
         plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
         plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
-        plt.plot(range(1, int(self.requests/2)+1), self.queue_size, marker="o")
-        plt.plot(range(1, int(self.requests/2)+1), self.queue_size2, marker="*")
-        
+        print(self.choice)
+        wektor_wyborow = []
+        for i, choice in enumerate(self.choice):
+            if choice == '1':
+                wektor_wyborow.append(self.queue_size[i])
+            else:
+                wektor_wyborow.append(self.queue_size2[i])
+
+        plt.plot(range(1, int(self.requests/2)+1), self.queue_size)
+        plt.plot(range(1, int(self.requests/2)+1), self.queue_size2)
+        plt.plot(range(1, int(self.requests/2)), wektor_wyborow, "r*")
         plt.title("Queue size")
         plt.xlabel("n")
         plt.ylabel("value")

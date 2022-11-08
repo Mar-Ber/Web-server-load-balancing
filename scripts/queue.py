@@ -72,7 +72,7 @@ class QueueShortest:
                 self.first_time = False
                 self.iterator+=1
 
-                print("hehe")
+                print("1 itaracja ")
             else:
                 print("h: ", self.requests_exit_time)
                 print("a: ", request_arrival_time)
@@ -82,10 +82,12 @@ class QueueShortest:
                     # self.queue_size[i] = self.queue_size[i-1] + 1
                     self.iterator+=1
 
-                    print("hop")
+                    print("Do gory kolejka")
                 elif self.iterator > 0:
                     # self.queue_size[i] = self.queue_size[i-1] - 1
                     self.iterator-=1
+                    print("W dol kolejka")
+
                         
                 self.requests_exit_time.append(self.service_start + request_service_time)
 
