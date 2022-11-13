@@ -12,8 +12,15 @@ n = 3 # number of requests that the script calculates math info about queue
 try:
     web_server = WebServer(input_distribution_type="M", service_time_distribution_type="M", service_channels=1,
                            buffer_size=buffer_size, arrival_rate=arrival_rate, service_frequency=service_frequency,
+                           requests=requests, policy_type="shortest")
+    web_server2 = WebServer(input_distribution_type="M", service_time_distribution_type="M", service_channels=1,
+                           buffer_size=buffer_size, arrival_rate=arrival_rate, service_frequency=service_frequency,
                            requests=requests, policy_type="random")
-    web_server.show_math_info(n, policy_type="random")
+    # Show math info
+    web_server2.show_math_info(n)
+
+    # Show plots for each type of queue
     web_server.show_plots()
+    web_server2.show_plots()
 except ValueError as ve:
     print("\n[ERROR] -> {0}".format(ve))
