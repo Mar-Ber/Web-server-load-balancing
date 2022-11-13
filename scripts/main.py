@@ -3,11 +3,13 @@
 
 from web_server import WebServer
 
+
 buffer_size = 3         # param: K
 arrival_rate = 20      # param: lambda
 service_frequency = 30 # param: mi
 requests = 80   # param: N
 n = 3 # number of requests that the script calculates math info about queue
+
 
 try:
     web_server = WebServer(input_distribution_type="M", service_time_distribution_type="M", service_channels=1,

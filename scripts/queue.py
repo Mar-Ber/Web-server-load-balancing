@@ -29,11 +29,15 @@ class Queue:
             print(self.requests)
             for i in range(1, self.requests):
                 service_start = max(requests_exit_time[i-1], self.requests_arrival_times[i])
-                if service_start > self.requests_arrival_times[i]:
-                    self.queue_size[i] = self.queue_size[i-1] + 1
-                elif self.queue_size[i-1] > 0:
-                    self.queue_size[i] = self.queue_size[i-1] - 1
-                requests_exit_time.append(service_start + self.requests_service_times[i])
+                if self.queue_size[i-1] == self.buffer_size and service_start > self.requests_arrival_times[i]:
+                    self.queue_size[i] = self.queue_size[i-1]
+                    requests_exit_time.append(requests_exit_time[i-1])
+                else:
+                    if service_start > self.requests_arrival_times[i]:
+                        self.queue_size[i] = self.queue_size[i-1] + 1
+                    elif self.queue_size[i-1] > 0:
+                        self.queue_size[i] = self.queue_size[i-1] - 1
+                    requests_exit_time.append(service_start + self.requests_service_times[i])
         else:
             raise ValueError("Service channels = {0} is not supported".format(self.service_channels))
 
