@@ -26,6 +26,7 @@ class Queue:
             service_start = self.requests_arrival_times[0]
             requests_exit_time = [service_start+self.requests_service_times[0]]
             self.queue_size = [0]*self.requests
+            print(self.requests)
             for i in range(1, self.requests):
                 service_start = max(requests_exit_time[i-1], self.requests_arrival_times[i])
                 if self.queue_size[i-1] == self.buffer_size and service_start > self.requests_arrival_times[i]:
@@ -56,3 +57,33 @@ class Queue:
         return f"<Queue ---{self.input_distribution_type}/{self.service_time_distribution_type}/" \
                f"{self.service_channels}/FIFO/{self.buffer_size}--- " \
                f"(lambda={self.arrival_rate}, mi={self.service_frequency}, N={self.requests})>"
+
+
+class QueueShortest:
+    def __init__(self, service_channels, requests):
+        self.service_channels = service_channels
+        self.requests = requests
+
+        self.service_start = None
+        self.first_time = True
+        self.requests_exit_time = None
+        self.queue_size = 0
+        
+    def simulate_shortest_queue(self, request_arrival_time, request_service_time, i):
+        if self.service_channels == 1:
+            if self.first_time is True:
+                self.service_start = request_arrival_time
+                self.requests_exit_time = [self.service_start + request_service_time]
+                self.queue_size += 1
+                self.first_time = False
+
+            else:
+                self.service_start = max(self.requests_exit_time[-1], request_arrival_time)
+                if self.service_start > request_arrival_time:
+                    self.queue_size += 1
+                elif self.queue_size > 0:
+                    self.queue_size -= 1
+
+                self.requests_exit_time.append(self.service_start + request_service_time)
+        else:
+            raise ValueError("Service channels = {0} is not supported".format(self.service_channels))
