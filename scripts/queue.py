@@ -26,7 +26,7 @@ class Queue:
             service_start = self.requests_arrival_times[0]
             requests_exit_time = [service_start+self.requests_service_times[0]]
             self.queue_size = [0]*self.requests
-            print(self.requests)
+
             for i in range(1, self.requests):
                 service_start = max(requests_exit_time[i-1], self.requests_arrival_times[i])
                 if self.queue_size[i-1] == self.buffer_size and service_start > self.requests_arrival_times[i]:
@@ -52,7 +52,7 @@ class Queue:
         plt.xlabel("n")
         plt.ylabel("value")
         if should_show:
-            plt.savefig("random.png")
+            plt.savefig("./data_output/random.png")
             plt.show()
 
     def __repr__(self):

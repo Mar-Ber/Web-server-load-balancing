@@ -102,7 +102,7 @@ class WebServer:
         plt.title("Queue size")
         plt.xlabel("n")
         plt.ylabel("value")
-        plt.savefig("shortest.png")
+        plt.savefig("./data_output/shortest.png")
         plt.show()
 
 
