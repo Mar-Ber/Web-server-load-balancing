@@ -44,6 +44,7 @@ class Queue:
     def plot_queue(self, should_show=True):
         if self.queue_size is None:
             self.simulate_queue()
+        plt.figure(1)
         plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
         plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.plot(range(1, self.requests+1), self.queue_size, marker="o")
@@ -51,6 +52,7 @@ class Queue:
         plt.xlabel("n")
         plt.ylabel("value")
         if should_show:
+            plt.savefig("random.png")
             plt.show()
 
     def __repr__(self):

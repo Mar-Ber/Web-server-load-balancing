@@ -32,7 +32,7 @@ class WebServer:
                 self.queues.append(Queue(self.input_distribution_type, self.service_time_distribution_type,
                                          self.requests_arrival_times[i], self.requests_service_times[i],
                                          service_channels, buffer_size, arrival_rate/2,
-                                         service_frequency, int(self.requests/4)))
+                                         service_frequency, int(self.requests/2)))
         elif self.policy_type == "shortest":
             self.shortest_queues = [QueueShortest(service_channels, int(self.requests/2)),
                                     QueueShortest(service_channels, int(self.requests/2))]
@@ -89,6 +89,7 @@ class WebServer:
       
 
     def show_shortest_queue_plots(self):
+        plt.figure(0)
         plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
         plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
 
@@ -101,7 +102,9 @@ class WebServer:
         plt.title("Queue size")
         plt.xlabel("n")
         plt.ylabel("value")
+        plt.savefig("shortest.png")
         plt.show()
+
 
 
     def show_random_queue_plots(self):

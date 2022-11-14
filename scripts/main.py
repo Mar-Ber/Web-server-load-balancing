@@ -4,8 +4,8 @@
 from web_server import WebServer
 
 
-buffer_size = 3         # param: K
-arrival_rate = 20      # param: lambda
+buffer_size = 10         # param: K
+arrival_rate = 50     # param: lambda
 service_frequency = 30 # param: mi
 requests = 80   # param: N
 n = 3 # number of requests that the script calculates math info about queue
@@ -22,7 +22,8 @@ try:
     web_server2.show_math_info(n)
 
     # Show plots for each type of queue
-    web_server.show_plots()
     web_server2.show_plots()
+    web_server.show_plots()
+
 except ValueError as ve:
     print("\n[ERROR] -> {0}".format(ve))
