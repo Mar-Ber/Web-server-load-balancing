@@ -49,8 +49,8 @@ class Queue:
         plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.plot(range(1, self.requests+1), self.queue_size, marker="o")
         plt.title("Queue size")
-        plt.xlabel("n")
-        plt.ylabel("value")
+        plt.xlabel("Processed request")
+        plt.ylabel("Value")
         if should_show:
             plt.savefig("./data_output/random.png")
             plt.show()
@@ -62,9 +62,8 @@ class Queue:
 
 
 class QueueShortest:
-    def __init__(self, service_channels, requests):
+    def __init__(self, service_channels):
         self.service_channels = service_channels
-        self.requests = requests
 
         self.service_start = None
         self.first_time = True

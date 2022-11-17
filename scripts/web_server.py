@@ -34,8 +34,8 @@ class WebServer:
                                          service_channels, buffer_size, arrival_rate/2,
                                          service_frequency, int(self.requests/2)))
         elif self.policy_type == "shortest":
-            self.shortest_queues = [QueueShortest(service_channels, int(self.requests/2)),
-                                    QueueShortest(service_channels, int(self.requests/2))]
+            self.shortest_queues = [QueueShortest(service_channels),
+                                    QueueShortest(service_channels)]
             self.calculate_shortest_queue_simulation()
         else:
             raise ValueError("Policy type = '{0}' is not supported.".format(self.policy_type))
@@ -100,8 +100,8 @@ class WebServer:
         plt.plot(range(1, int(self.requests/2)+1), self.queue_size2)
         plt.plot(range(1, int(self.requests/2)), list_choice, "r*")
         plt.title("Queue size")
-        plt.xlabel("n")
-        plt.ylabel("value")
+        plt.xlabel("Processed request")
+        plt.ylabel("Value")
         plt.savefig("./data_output/shortest.png")
         plt.show()
 
